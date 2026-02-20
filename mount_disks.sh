@@ -1,28 +1,22 @@
 #!/bin/bash
-# Automount-Skript ohne vfat oder ntfs Partitionen, nur Partitionen mit einem Dateisystem, das kein vfat oder ntfs ist, werden gemountet
+# Automount script without vfat or ntfs partitions; only partitions with a file system that is not vfat or ntfs are mounted
 
-echo "Starte das Automount-Skript..."
-
-# Alle Partitionen mit einem Dateisystem ermitteln (nur 'part' und 'fstype' überprüfen)
+# Determine all partitions with a file system (check only ‘part’ and ‘fstype’)
 for dev in $(lsblk -lnpo NAME,FSTYPE,TYPE | awk '$2 && $3 == "part" {print $1}'); do
-    echo "Überprüfe Gerät: $dev"
+    echo "Checking device: $dev"
 
-    # Prüfen, ob das Dateisystem vfat oder ntfs ist
     fstype=$(lsblk -no FSTYPE "$dev")
     
-    # Überspringe vfat und ntfs Partitionen
     if [[ "$fstype" == "vfat" || "$fstype" == "ntfs" ]]; then
-        echo "Überspringe Partition mit $fstype: $dev"
+        echo "Skip partition with $fstype: $dev"
         continue
     fi
 
-    # Prüfen, ob die Partition bereits eingebunden ist
+    # Check whether the partition is already mounted
     if ! mount | grep -q "$dev"; then
         echo "Mounting $dev..."
-        udisksctl mount -b "$dev" || echo "Fehler beim Mounten von $dev"
+        udisksctl mount -b "$dev" || echo "Error mounting $dev"
     else
-        echo "$dev ist bereits eingebunden."
+        echo "$dev is already included"
     fi
 done
-
-echo "Automount-Skript beendet."
