@@ -22,10 +22,10 @@ clear
 echo "Setting up Lightdm/Cinnamon background image"
 echo " -- Please give sudo-password -- "
 sudo mkdir -p /usr/share/backgrounds/
-sudo cp ~/void/*.jpg /usr/share/backgrounds/
+sudo cp ~/void-cinnamon/*.jpg /usr/share/backgrounds/
 
 # Copy automountscript for udisk2
-sudo cp ~/void/mount_disks.sh /usr/bin/
+sudo cp ~/void-cinnamon/mount_disks.sh /usr/bin/
 
 
 # Check system updates
